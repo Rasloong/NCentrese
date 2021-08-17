@@ -1,0 +1,19 @@
+.contenedor {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
+.centrado {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: black;
+    font-size: 300%;
+    display: block;
+}
+
+.centrado:hover {
+    display: none;
+}
