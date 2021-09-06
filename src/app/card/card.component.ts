@@ -1,3 +1,4 @@
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 
@@ -257,32 +258,69 @@ export class CardComponent implements OnInit {
       active: '/assets/images/41.jpg',
       desactive: '/assets/images/poker.png',
     }
+    ,
+    {
+      id: 43,
+      active: '/assets/images/42.jpg',
+      desactive: '/assets/images/poker.png',
+    }
+    ,
+    {
+      id: 44,
+      active: '/assets/images/43.jpg',
+      desactive: '/assets/images/poker.png',
+    }
+    ,
+    {
+      id: 45,
+      active: '/assets/images/44.jpg',
+      desactive: '/assets/images/poker.png',
+    }
+    ,
+    {
+      id: 46,
+      active: '/assets/images/45.jpg',
+      desactive: '/assets/images/poker.png',
+    }
+    ,
+    {
+      id: 47,
+      active: '/assets/images/46.jpg',
+      desactive: '/assets/images/poker.png',
+    }
+    ,
+    {
+      id: 48,
+      active: '/assets/images/47.jpg',
+      desactive: '/assets/images/poker.png',
+    }
   ];
+  public soundhit=new Audio('/assets/sounds/campana.mp3');
+  public sounderror=new Audio('/assets/sounds/error.mp3');
   public images_Back = '/assets/images/poker.png';
   public cards: any = [];
-  private last_Select_Id = -1;
-  private Hits = 41;
+  private last_Select_Id:number = -1;
+  private Hits = 16;
   private count_Hits = 0;
   public Attempts = 20;
   public cont_Attempts = 0;
   constructor() {}
 
   ngOnInit() {
-    let count_index = 0;
+
+    let count_index = this.RandomStartIndex(this.images,16);
+    console.log("que me llega "+count_index);
+    let actual_index=count_index;
     for (let i = 0; i < this.Hits * 2; i++) {
-      if (count_index == this.Hits) {
-        count_index = 0;
+      if (i == this.Hits) {
+        count_index = actual_index;
       }
       let img = this.images[count_index];
-      this.cards.push({
-        id: img.id,
-        aurl: img.active,
-        durl: img.desactive,
-        visible: false,
-        active: true,
-      });
+      console.log("que pasa "+count_index);
+      this.cards.push({id: img.id,aurl: img.active,durl: img.desactive,visible: false,active: true,});
       count_index++;
     }
+    console.log(this.cards);
     this.RandomArray(this.cards);
   }
 
@@ -291,34 +329,57 @@ export class CardComponent implements OnInit {
       return;
     }
     this.cards[idx].visible = true;
-
     if (this.last_Select_Id == -1) {
       this.last_Select_Id = idx;
       this.cards[idx].visible = true;
       this.cards[idx].active = false;
-
+      document.getElementById(idx)!.style.display='none';
     } else {
       if (this.cards[this.last_Select_Id].id == this.cards[idx].id) {
         this.count_Hits++;
         console.log("actual"+idx+"anterior"+this.last_Select_Id);
-        this.cards[idx].durl = '/assets/images/11.png';
-        this.cards[this.last_Select_Id].durl = '/assets/images/11.png';
         this.cards[idx].visible = true;
         this.cards[idx].active = false;
+        document.getElementById(idx)!.style.display='none';
+        document.getElementById(this.last_Select_Id+'')!.style.display='none';
         this.last_Select_Id = -1;
         console.log("iguales");
         console.log(this.cards);
+        this.soundhit.play();
       } else {
         let _this = this;
+        document.getElementById(idx)!.style.display='none';
+        this.sounderror.play();
         setTimeout(function () {
           _this.cards[_this.last_Select_Id].visible = false;
           _this.cards[_this.last_Select_Id].active = true;
           _this.cards[idx].visible = false;
+          document.getElementById(idx)!.style.display='block';
+          document.getElementById(_this.last_Select_Id+'')!.style.display='block';
           _this.last_Select_Id = -1;
-        }, 1000);
+        }, 3000);
       }
     }
   }
+
+  RandomStartIndex(array:any,lent:number){
+    let ramdonIndex:any;
+    let size:number;
+    size=(array.length+6)/lent;
+    ramdonIndex=Math.floor(Math.random() * size);
+    console.log("ramdom " + ramdonIndex);
+    switch (ramdonIndex) {
+      case 0:
+        return 0;
+      case 1:
+        return 16;
+      case 2:
+        return 31;
+        default:
+          return 0;
+    }
+  }
+
 
   RandomArray(array: any) {
     let currentIndex = array.length,
@@ -332,7 +393,6 @@ export class CardComponent implements OnInit {
       array[currentIndex] = array[randomIndex];
       array[randomIndex] = temporaryValue;
     }
-    console.log(array);
     return array;
   }
 }

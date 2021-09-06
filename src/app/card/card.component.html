@@ -3,7 +3,7 @@
         <span *ngFor="let card of cards; index as i">
           <div class="contenedor">
             <img class="img-card" src="{{card.visible ? card.aurl : card.durl}}" (click)="card_selected(i)">
-            <div class="centrado">{{i}}</div>
+            <div class="centrado" id="{{i}}" style="user-select: none;">{{i+1}}</div>
           </div>
       </span>
     </div>
